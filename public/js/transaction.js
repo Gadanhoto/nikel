@@ -9,8 +9,6 @@ let data = {
 document.getElementById("button-logout").addEventListener("click", logout);
 
 
-
-
 //ADICIONAR LANÇAMENTO
 document.getElementById("transaction-form").addEventListener("submit", function(e) {
     e.preventDefault();
@@ -28,7 +26,7 @@ document.getElementById("transaction-form").addEventListener("submit", function(
         e.target.reset();
         myModal.hide();
     
-        getTransactions();
+        getTransaction();
     
     alert("lançamento adicinado com sucesso");
     
@@ -37,34 +35,33 @@ document.getElementById("transaction-form").addEventListener("submit", function(
 
     checklogged();
 
-function checklogged() {
-    if (session) {
-      sessionStorage.setItem("logged", session);
-      logged = session;
-    }
+    function checklogged() { 
+    if(session) {
+        sessionStorage.setItem("logged", session);
+        logged = session;
+   }
+    
+      if(!logged) {
+        window.location.href = "index.html";
+        return;
+      }
   
-    if (!logged) {
-      window.location.href = "index.html";
-      return;
-    }
+      const dataUser = localStorage.getItem(logged);
+      if(dataUser){
+          data = JSON.parse(dataUser);
+      }
+   
+      getTransaction();    
+}
 
-    const dataUser = localStorage.getItem(logged);
-    if(dataUser){
-        data = JSON.parse(dataUser);
-    }
-
-    getTransactions();
-
-
-
-    function logout() {
+function logout() {
         sessionStorage.removeItem("logged");
         localStorage.removeItem("session");
 
         window.location.href = "index.html";
 }
 
-function gettransaction() {
+function getTransaction() {
     const transactions = data.transactions;
     let transactionsHtml = ``;
     
@@ -73,7 +70,7 @@ function gettransaction() {
             let type = "entrada";
 
             if(item.type === "2") {
-                type = "saida";
+                type = "Saida";
             }
 
             transactionsHtml += `
@@ -95,4 +92,3 @@ function saveData(data) {
 }
 
 
-}
